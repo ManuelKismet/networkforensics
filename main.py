@@ -1,7 +1,8 @@
 import os
-
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 
 def pp(*args):
@@ -62,12 +63,32 @@ def data_balancing(data):
         max_d_samp = data[i].loc[rand_ind]
         u_sampled = pd.concat([data[i][data[i]['Label'] == min_d_label], max_d_samp], axis=0)
         data[i] = u_sampled
-        print(data[i]['Label'].value_counts())
     return data
+
+
+def train_test_data(usd):  # usd: under sampled data
+    training = []
+    testing = []
+    train_scaled = []
+    for entry in usd:
+        train, test = train_test_split(entry, test_size=0.3)
+        training.append(train)
+        testing.append(test)
+
+    scaler = StandardScaler()
+    for entr in training:
+        scaled = scaler.fit_transform(entr)
+        train_scaled.append(scaled)
+    return train_scaled, testing
+
+
+def model_train_test(t_data, ts_data):  # training data and test data as args
+
 
 
 if __name__ == '__main__':
     paths = file_path()
     p_data = read_parquet_dataset(paths)  # p: parquet data
     b_data = binary_labeling(p_data)
-    data_balancing(b_data)
+    u_samp_data = data_balancing(b_data)  # under sampled data
+    train_test_data(u_samp_data)
