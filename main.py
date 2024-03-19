@@ -54,17 +54,16 @@ def binary_labeling(data):
 
 def data_balancing(data):
     for i in range(len(data)):
-        pp(data[9]['Label'].value_counts(), 'last data set')
-        # d_count = data[0]['Label'].value_counts()
-        # min_d_label = d_count.idxmin()
-        # min_d_count = d_count[min_d_label]
-        # print(f"label{data[0]['Label']}", '\n', f'min label{min_d_label}')
-        # max_d_ind = data[0][data[0]['Label'] != min_d_label].index
-        # rand_ind = np.random.choice(max_d_ind, min_d_count, replace=False)
-        # max_d_samp = data[i].loc[rand_ind]
-        # u_sampled = pd.concat([data[i][data[i]['Label'] == min_d_label], max_d_samp], axis=1)
-        # u_sampled.dropna(inplace=True)
-        # print(f'max index{max_d_ind}')
+        d_count = data[i]['Label'].value_counts()
+        min_d_label = d_count.idxmin()  # 1 as index of the min val count
+        min_d_count = d_count[min_d_label]  # 541
+        max_d_ind = data[i][data[i]['Label'] != min_d_label].index
+        rand_ind = np.random.choice(max_d_ind, min_d_count, replace=False)
+        max_d_samp = data[i].loc[rand_ind]
+        u_sampled = pd.concat([data[i][data[i]['Label'] == min_d_label], max_d_samp], axis=0)
+        data[i] = u_sampled
+        print(data[i]['Label'].value_counts())
+    return data
 
 
 if __name__ == '__main__':
