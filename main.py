@@ -69,21 +69,34 @@ def data_balancing(data):
 def train_test_data(usd):  # usd: under sampled data
     training = []
     testing = []
-    train_scaled = []
     for entry in usd:
         train, test = train_test_split(entry, test_size=0.3)
         training.append(train)
         testing.append(test)
+    return training, testing
 
+
+def xy_split(tr_data, te_data):  # training and testing data
+    x_train, x_test, y_train, y_test = [], [], [], []
+    for tr, te in zip(tr_data, te_data):
+        x_train.append(tr.drop(['Label', 'Protocol'], axis=1))
+        x_test.append(te.drop(['Label'], axis=1))
+        y_train.append(tr['Label'])
+        y_test.append(te['Label'])
+    return x_train, x_test, y_train, y_test
+
+
+def scaling(xtr_data):  # training data
+    scaled_tr_data = []
     scaler = StandardScaler()
-    for entr in training:
+    for entr in xtr_data:
         scaled = scaler.fit_transform(entr)
-        train_scaled.append(scaled)
-    return train_scaled, testing
+        scaled_tr_data.append(scaled)
+    return scaled_tr_data
 
 
-def model_train_test(t_data, ts_data):  # training data and test data as args
-    myprint(t_data[9])
+def model_train_test(xt_data, yt_data, xte_data, yte_data):  # training data and test data
+    pass
 
 
 if __name__ == '__main__':
@@ -91,5 +104,8 @@ if __name__ == '__main__':
     p_data = read_parquet_dataset(paths)  # p: parquet data
     b_data = binary_labeling(p_data)
     u_samp_data = data_balancing(b_data)  # under sampled data
-    s_train_d, test_d = train_test_data(u_samp_data)
-    model_train_test(s_train_d, test_d)
+    train_d, test_d = train_test_data(u_samp_data)
+    xtr, xte, ytr, yte = xy_split(train_d, test_d)  # xtrain xtest ytrain ytest
+    myprint(xtr, ' x strained data', ytr, ' y trained data')
+    sctr = scaling(xtr)  # scaled train data
+    model_train_test(sctr, ytr, xte, yte)
