@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 
-def pp(*args):
+def myprint(*args):
     for i in range(0, len(args), 2):
         arg = args[i]
         comment = args[i + 1] if i + 1 < len(args) else None
@@ -83,7 +83,7 @@ def train_test_data(usd):  # usd: under sampled data
 
 
 def model_train_test(t_data, ts_data):  # training data and test data as args
-
+    myprint(t_data[9])
 
 
 if __name__ == '__main__':
@@ -91,4 +91,5 @@ if __name__ == '__main__':
     p_data = read_parquet_dataset(paths)  # p: parquet data
     b_data = binary_labeling(p_data)
     u_samp_data = data_balancing(b_data)  # under sampled data
-    train_test_data(u_samp_data)
+    s_train_d, test_d = train_test_data(u_samp_data)
+    model_train_test(s_train_d, test_d)
