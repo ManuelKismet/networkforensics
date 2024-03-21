@@ -1,6 +1,8 @@
 import os
 import numpy as np
 import pandas as pd
+from sklearn.metrics import classification_report
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
@@ -70,7 +72,7 @@ def train_test_data(usd):  # usd: under sampled data
     training = []
     testing = []
     for entry in usd:
-        train, test = train_test_split(entry, test_size=0.3)
+        train, test = train_test_split(entry, test_size=0.3, random_state=42)
         training.append(train)
         testing.append(test)
     return training, testing
@@ -80,23 +82,32 @@ def xy_split(tr_data, te_data):  # training and testing data
     x_train, x_test, y_train, y_test = [], [], [], []
     for tr, te in zip(tr_data, te_data):
         x_train.append(tr.drop(['Label', 'Protocol'], axis=1))
-        x_test.append(te.drop(['Label'], axis=1))
+        x_test.append(te.drop(['Label', 'Protocol'], axis=1))
         y_train.append(tr['Label'])
         y_test.append(te['Label'])
+    myprint(x_train[1].shape, 'x train', x_test[1].shape, 'x test',
+            y_train[1].shape, 'y train', y_test[1].shape, 'y test')
     return x_train, x_test, y_train, y_test
 
 
-def scaling(xtr_data):  # training data
+def scaling(xtr_data, xte_data):  # training data
     scaled_tr_data = []
+    scaled_te_data = []
     scaler = StandardScaler()
-    for entr in xtr_data:
-        scaled = scaler.fit_transform(entr)
-        scaled_tr_data.append(scaled)
-    return scaled_tr_data
+    for entr1, entr2 in zip(xtr_data, xte_data):
+        scaled_tr_data.append(scaler.fit_transform(entr1))
+        scaled_tr_data.append(scaler.fit_transform(entr2))
+    myprint(scaled_tr_data[1].shape, 'scaled train', scaled_tr_data[1].shape, 'scaled test')
+    return scaled_tr_data, scaled_te_data
 
 
 def model_train_test(xt_data, yt_data, xte_data, yte_data):  # training data and test data
-    pass
+    myprint(xt_data[1].shape, 'xtrain', xte_data[1].shape, 'xtest',
+            yt_data[1].shape, 'ytrain', yte_data[1].shape, 'ytest')
+    dtc = DecisionTreeClassifier()  # dtc: decision tree classifier
+    dtc.fit(xt_data[1], yt_data[1])
+    y_pred = dtc.predict(xte_data[1])
+    print(classification_report(yte_data[1], y_pred))
 
 
 if __name__ == '__main__':
@@ -106,6 +117,5 @@ if __name__ == '__main__':
     u_samp_data = data_balancing(b_data)  # under sampled data
     train_d, test_d = train_test_data(u_samp_data)
     xtr, xte, ytr, yte = xy_split(train_d, test_d)  # xtrain xtest ytrain ytest
-    myprint(xtr, ' x strained data', ytr, ' y trained data')
-    sctr = scaling(xtr)  # scaled train data
-    model_train_test(sctr, ytr, xte, yte)
+    sctr, scte = scaling(xtr, xte)  # scaled train and test data
+    model_train_test(sctr, ytr, scte, yte)
