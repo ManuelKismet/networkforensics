@@ -3,12 +3,11 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import classification_report
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.preprocessing import StandardScaler
 
 
-DATA_DIR = os.environ['DataSetPath']  # r'C:\Users\jd Phones\Documents\Thesis\dataSet'
-print(DATA_DIR)
+# DATA_DIR = os.environ['DataSetPath']  # r'C:\Users\jd Phones\Documents\Thesis\dataSet'
 index = 0
 
 
@@ -24,7 +23,7 @@ def myprint(*args):
 
 def file_path():
     path = []
-    for root, dirs, files in os.walk(DATA_DIR):
+    for root, dirs, files in os.walk(r'C:\Users\jd Phones\Documents\Thesis\dataSet'):
         # print(root, '\n', dirs, '\n', files)
         for file in files:
             if file.endswith('parquet'):
@@ -112,10 +111,18 @@ def scaling(xtr_data, xte_data):  # training data
 def model_train_test(xt_data, yt_data, xte_data, yte_data):  # training data and test data
     myprint(xt_data[index].shape, 'xtrain', xte_data[index].shape, 'xtest',
             yt_data[index].shape, 'ytrain', yte_data[index].shape, 'ytest')
-    dtc = DecisionTreeClassifier()  # dtc: decision tree classifier
-    dtc.fit(xt_data[index], yt_data[index])
-    y_pred = dtc.predict(xte_data[index])
-    print(classification_report(yte_data[index], y_pred))
+    params = {'max_depth': [2, 4, 7, 10], 'min_samples_split': [2, 3, 5],
+              'min_samples_leaf': [1, 2, 3, 5], 'criterion': ['gini', 'entropy']}
+    dtc = DecisionTreeClassifier(criterion='entropy', max_depth=5)  # dtc: decision tree classifier
+    # dtc.fit(xt_data[index], yt_data[index])
+    # y_pred = dtc.predict(xte_data[index])
+    # print(classification_report(yte_data[index], y_pred))
+
+# hyper param tuning
+    rd = RandomizedSearchCV(dtc, param_distributions=params, n_iter=10, cv=3, n_jobs=-1)
+    rd.fit(xt_data[index], yt_data[index])
+    print(rd.best_params_)
+    print(rd.best_score_)
 
 
 if __name__ == '__main__':
