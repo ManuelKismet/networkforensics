@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fef802fa-e521-4ed6-b4f5-57ebdc462f52" name="Changes" comment="processing">
-      <change afterPath="$PROJECT_DIR$/evidence.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unsupervise.py" beforeDir="false" afterPath="$PROJECT_DIR$/unsupervise.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +71,7 @@
       <recent name="C:\Users\jd Phones\PycharmProjects\thesis" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.evidence">
+  <component name="RunManager" selected="Python.unsupervise">
     <configuration name="evidence" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="thesis" />
       <option name="ENV_FILES" value="" />
@@ -166,8 +166,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.evidence" />
         <item itemvalue="Python.unsupervise" />
+        <item itemvalue="Python.evidence" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.processToParquet" />
       </list>
@@ -195,7 +195,7 @@
       <workItem from="1710463285775" duration="57821000" />
       <workItem from="1711108475509" duration="9946000" />
       <workItem from="1712306919341" duration="529000" />
-      <workItem from="1714467352431" duration="9399000" />
+      <workItem from="1714467352431" duration="16152000" />
     </task>
     <task id="LOCAL-00001" summary="processing">
       <option name="closed" value="true" />
@@ -293,7 +293,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714544965428</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="processing">
+      <option name="closed" value="true" />
+      <created>1714557245991</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1714557245991</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -304,9 +312,9 @@
     <option name="LAST_COMMIT_MESSAGE" value="processing" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/thesis$evidence.coverage" NAME="evidence Coverage Results" MODIFIED="1714556837230" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/thesis$evidence.coverage" NAME="evidence Coverage Results" MODIFIED="1714557153807" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/thesis$identifyAnomalies.coverage" NAME="identifyAnomalies Coverage Results" MODIFIED="1710471632343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/thesis$unsupervise.coverage" NAME="unsupervise Coverage Results" MODIFIED="1714545019345" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/thesis$unsupervise.coverage" NAME="unsupervise Coverage Results" MODIFIED="1714652210419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/thesis$main.coverage" NAME="main Coverage Results" MODIFIED="1711368062525" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
