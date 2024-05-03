@@ -14,8 +14,14 @@ def data_preprocessing(data):
     Xd = []  # xdata
     yd = []  # ydata
     for index in range(len(data)):
+        cat = {'Benign': 0, 'Bot': 1}
+        ser = pd.Series(data[index]['Label'])
+        ser = ser.cat.rename_categories(cat)
+        # data[index].replace('Benign', 0, inplace=True)
+        # data[index].replace('Bot', 1, inplace=True)
+        yd.append(ser)
+        # yd.append(data[index]['Label'])
         Xd.append(data[index].drop(['Label'], axis=1))
-        yd.append(data[index]['Label'])
     # corr_matrix = data[0].corr(method='pearson')
     # plt.figure(figsize=(10, 8))
     # sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f")
@@ -33,12 +39,13 @@ def scaling(data):
     return scaled_data
 
 
-def model_train_test(xs_data, ydata):  # x scaled data
-    for i in range(len(xs_data)):
-        # X_train, X_test, y_train, y_test = train_test_split(xs_data, ydata, test_size=0.2, random_state=42)
-        xs_data[i].replace('Benign', 0, inplace=True)
-        ydata[i].replace('Bot', 1, inplace=True)
-    return xs_data, ydata
+# def model_train_test(xs_data, ydata):  # x scaled data
+#     print(dir(np.ndarray))
+#     for i in range(len(xs_data)):
+#         # X_train, X_test, y_train, y_test = train_test_split(xs_data, ydata, test_size=0.2, random_state=42)
+#         xs_data[i].replace('Benign', 0, inplace=True)
+#         ydata[i].replace('Bot', 1, inplace=True)
+#     return xs_data, ydata
 
 
 def predict(x, y):
@@ -46,7 +53,7 @@ def predict(x, y):
     y_pred = clf.fit_predict(x[0])
     y_pred[y_pred == 1] = 0  # Normal
     y_pred[y_pred == -1] = 1  # Anomaly
-    print(classification_report(y, y_pred))
+    print(classification_report(y[0], y_pred))
 
 
 if __name__ == '__main__':
@@ -54,8 +61,8 @@ if __name__ == '__main__':
     p_data = read_parquet_dataset(paths)
     X_data, y_data = data_preprocessing(p_data)
     scaled = scaling(X_data)
-    xx, yy = model_train_test(scaled, y_data)
-    predict(xx, yy)
+#    xx, yy = model_train_test(scaled, y_data)
+    predict(scaled, y_data)
 
     # Assuming label information is not available in this case
     # labels = np.zeros(len(scaled_data))  # Dummy labels (all normal)
