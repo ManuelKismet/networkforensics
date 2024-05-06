@@ -8,11 +8,16 @@ from sklearn.metrics import classification_report, make_scorer, f1_score, precis
 from sklearn.ensemble import IsolationForest
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import StandardScaler
+from sklearn.svm import OneClassSVM
+
 from main import myprint, file_path, read_parquet_dataset, data_balancing
 import seaborn as sns
 
 
 def data_preprocessing(data):
+    # pd.set_option('display.max_rows', None)
+    # pd.set_option('display.max_columns', None)
+    # print(data[0].sample())
     corXd = []
     yd = []  # ydata
 
@@ -45,13 +50,13 @@ def data_preprocessing(data):
 
         for i in range(len(cor_met.columns)):
             for j in range(i + 1, len(cor_met.columns)):
-                if abs(cor_met.iloc[i, j]) > 0.8:  # Adjust threshold as needed
+                if abs(cor_met.iloc[i, j]) > 0.6:
                     highly_correlated_pairs.append((cor_met.columns[i], cor_met.columns[j]))
 
         correlated_items = [item for pair in highly_correlated_pairs for item in pair]
         item_counts = Counter(correlated_items)
 
-        cols_to_drop = [item for item, count in item_counts.items() if count > 5]
+        cols_to_drop = [item for item, count in item_counts.items() if count > 6]
 
         corXd.append(uSample.drop(cols_to_drop, axis=1))
 
@@ -82,26 +87,31 @@ def scaling(data):
 
 
 def predict(x, y):
-    clf = IsolationForest(random_state=42)
-    param_grid = {
-        'n_estimators': [50, 100, 150],
-        'max_samples': [0.5, 0.7, 0.9],
-        'contamination': [0.01, 0.05, 0.1, 0.2]
-    }
-    scorer = make_scorer(f1_score, average='micro')  # e.g., f1_score, precision, recall)
-    grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, scoring=scorer, cv=5)
-    # for i in range(len(x)):
-    grid_search.fit(x[0], None)
-    best_params = grid_search.best_params_
-    best_model = IsolationForest(**best_params, random_state=42)
-    best_model.fit(x[0])
-    y_pred = best_model.predict(x[0])
-    y_pred[y_pred == 1] = 0  # Normal
-    y_pred[y_pred == -1] = 1  # Anomaly
-    f1 = f1_score(y[0], y_pred)
+    # clf = IsolationForest(random_state=42, n_jobs=-1)
+    svm = OneClassSVM()
+    #
+    # param_grid = {'n_estimators': [50, 100, 150], 'max_samples': [.5, .7, .9], 'contamination': [.01, .05, .1, .2],
+    #               'max_features': ['auto', 'sqrt', '', .1, .5, 1]}
+    #
+    # scorer = make_scorer(f1_score, average='micro')
+    # grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, scoring=scorer, n_jobs=-1, cv=5)
+    #
+    # # for i in range(len(x)):
+    # grid_search.fit(x[0], y[0])
+    # best_params = grid_search.best_params_
+    # best_model = IsolationForest(**best_params, random_state=42)
+    #
+    # best_model.fit(x[0])
+    # y_pred = best_model.predict(x[0])
+    # y_pred = clf.fit_predict(x[0])
+    yy_pred = svm.fit_predict(x[0])
+    yy_pred[yy_pred == 1] = 0  # Normal
+    yy_pred[yy_pred == -1] = 1  # Anomaly
 
-    print("F1 Score:", f1)
-        # print(classification_report(y[i], y_pred))
+    # f1 = f1_score(y[0], y_pred)
+    # score = classification_report(y[0], yy_pred)
+    svmscore = classification_report(y[0], yy_pred)
+    print(svmscore, 'svmscore')
 
 
 if __name__ == '__main__':
