@@ -13,7 +13,7 @@ def capture_packets(interface, duration, output_file):
     packets = sniff(iface=interface, count=0, timeout=duration)
     for pkt in packets:
         print(pkt.fields)
-    print(packets[0].layers)
+    print(packets[0].show())
     wrpcap(output_file, packets)
     print(f"Captured {len(packets)} packets and stored in {output_file}")
 
