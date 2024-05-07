@@ -3,6 +3,16 @@ import datetime as dt
 import os
 import subprocess
 from scapy.all import *
+from sklearn.ensemble import IsolationForest
+
+
+
+# Load the trained Isolation Forest model
+def load_model(model_path):
+    # Load the trained model from file
+    model = IsolationForest()
+    model.load_model(model_path)
+    return model
 
 
 def capture_packets(interface, duration, output_file):
@@ -61,3 +71,64 @@ def capture_packets(interface, duration, output_file):
 
 if __name__ == "__main__":
     capture_packets('Intel(R) Dual Band Wireless-AC 8260', 10, 'output.pcap')
+
+
+#
+# import numpy as np
+# import pandas as pd
+# from sklearn.ensemble import IsolationForest
+#
+# # Load the trained Isolation Forest model
+# def load_model(model_path):
+#     # Load the trained model from file
+#     model = IsolationForest()
+#     model.load_model(model_path)
+#     return model
+#
+# # Preprocess incoming packet data
+# def preprocess_packet(packet):
+#     # Extract relevant features from the packet
+#     # Preprocess the packet data to match the format used during model training
+#     features = extract_features(packet)
+#     return features
+#
+# # Perform real-time anomaly detection
+# def detect_anomalies(packet, model):
+#     # Preprocess the incoming packet data
+#     features = preprocess_packet(packet)
+#     # Predict the anomaly score for the packet using the loaded model
+#     anomaly_score = model.predict(features)
+#     return anomaly_score
+#
+# # Define a threshold for anomaly detection
+# THRESHOLD = -0.5
+#
+# # Function to trigger alert based on anomaly score
+# def trigger_alert(anomaly_score):
+#     if anomaly_score < THRESHOLD:
+#         print("Anomaly detected! Triggering alert...")
+#
+# # Main function to simulate real-time packet analysis
+# def main():
+#     # Load the trained Isolation Forest model
+#     model_path = 'trained_model.pkl'
+#     model = load_model(model_path)
+#
+#     # Simulate incoming packet data (replace with actual data source)
+#     packet_stream = generate_packet_stream()
+#
+#     # Process incoming packets and perform real-time anomaly detection
+#     for packet in packet_stream:
+#         # Perform anomaly detection on the current packet
+#         anomaly_score = detect_anomalies(packet, model)
+#         # Trigger alert if anomaly score exceeds threshold
+#         trigger_alert(anomaly_score)
+#
+# # Function to generate simulated packet stream (replace with actual data source)
+# def generate_packet_stream():
+#     # Simulate generation of packet data
+#     packet_stream = [np.random.rand(61) for _ in range(1000)]  # Example: 1000 packets with 61 features each
+#     return packet_stream
+#
+# if __name__ == "__main__":
+#     main()

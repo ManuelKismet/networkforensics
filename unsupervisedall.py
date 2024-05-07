@@ -15,8 +15,7 @@ import seaborn as sns
 
 
 def data_preprocessing(data):
-    corXd = []
-    yd = []  # ydata
+    df = pd.concat(data, axis=0)
 
     categories = ['Bot', 'FTP-BruteForce', 'SSH-Bruteforce', 'DDoS attacks-LOIC-HTTP', 'DDOS attack-LOIC-UDP',
                   'DDOS attack-HOIC', 'DoS attacks-Slowloris', 'DoS attacks-GoldenEye', 'DoS attacks-SlowHTTPTest',
@@ -25,39 +24,37 @@ def data_preprocessing(data):
     cat = {'Benign': 0}
     cat.update({category: 1 for category in categories})
 
-    for entry in data:
-        entry['Label'] = pd.Series(entry['Label']).map(cat)
+    df['Label'] = pd.Series(df['Label']).map(cat)
 
-        val_count = entry['Label'].value_counts()
-        min_d_label = val_count.idxmin()
-        min_d_cnt = val_count[min_d_label]
+    val_count = df['Label'].value_counts()
+    min_d_label = val_count.idxmin()
+    min_lb_cnt = val_count[min_d_label]
 
-        max_d_index = entry.index[entry['Label'] != min_d_label]
-        randIndex = np.random.choice(max_d_index, min_d_cnt, replace=False)
+    df.reset_index(drop=True, inplace=True)
+    max_lb_index = df.index[df['Label'] != min_d_label]
+    randIndex = np.random.choice(max_lb_index, min_lb_cnt, replace=False)
 
-        maxSample = entry.loc[randIndex]
+    maxSample = df.loc[randIndex]
+    uSample = pd.concat([df[df['Label'] == min_d_label], maxSample], axis=0)
 
-        uSample = pd.concat([entry[entry['Label'] == min_d_label], maxSample], axis=0)
-        uSample.reset_index(drop=True, inplace=True)
+    y = uSample['Label']
 
-        yd.append(uSample['Label'])
+    cor_met = uSample.corr(method='pearson')
+    highly_correlated_pairs = []
 
-        cor_met = uSample.corr(method='pearson')
-        highly_correlated_pairs = []
+    for i in range(len(cor_met.columns)):
+        for j in range(i + 1, len(cor_met.columns)):
+            if abs(cor_met.iloc[i, j]) > 0.4:
+                highly_correlated_pairs.append((cor_met.columns[i], cor_met.columns[j]))
 
-        for i in range(len(cor_met.columns)):
-            for j in range(i + 1, len(cor_met.columns)):
-                if abs(cor_met.iloc[i, j]) > 0.7:
-                    highly_correlated_pairs.append((cor_met.columns[i], cor_met.columns[j]))
+    correlated_items = [item for pair in highly_correlated_pairs for item in pair]
+    item_counts = Counter(correlated_items)
 
-        correlated_items = [item for pair in highly_correlated_pairs for item in pair]
-        item_counts = Counter(correlated_items)
+    cols_to_drop = [item for item, count in item_counts.items() if count > 5]
 
-        cols_to_drop = [item for item, count in item_counts.items() if count > 7]
+    x = uSample.drop(cols_to_drop + ['Protocol', 'Label'], axis=1)
 
-        corXd.append(uSample.drop(cols_to_drop + ['Protocol', 'Label'], axis=1))
-
-    return corXd, yd
+    return x, y
     # corr_matrix = Xd[0].corr(method='pearson')
     # plt.figure(figsize=(10, 8))
     # sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f")
@@ -67,11 +64,8 @@ def data_preprocessing(data):
 
 def scaling(data):
     scaler = StandardScaler()
-    scaled_data = []
-    # scaled_data = [scaler.fit_transform(entry.drop(['Label', 'Protocol'], axis=1)) for entry in data]
-    for i in range(len(data)):
-        scaled_data.append(scaler.fit_transform(data[i]))
-    return scaled_data
+    scaled_d = scaler.fit_transform(data)
+    return scaled_d
 
 
 def plot_classification_report(report):
@@ -120,29 +114,28 @@ def predict(x, y):
 
     clf = IsolationForest(random_state=42, n_jobs=-1, n_estimators=50)
 
-    for i in range(len(x)):
-        [clf.fit(x[i]) for k in range(3)]
-        plot_isolation_forest_pca(clf, x[i])
-        y_pred = clf.predict(x[i])
-        y_pred[y_pred == 1] = 0  # Normal
-        y_pred[y_pred == -1] = 1  # Anomaly
+    [clf.fit(x) for k in range(3)]
+    plot_isolation_forest_pca(clf, x)
+    y_pred = clf.predict(x)
+    y_pred[y_pred == 1] = 0  # Normal
+    y_pred[y_pred == -1] = 1  # Anomaly
 
-        score = classification_report(y[i], y_pred)
-        print(score)
-        plot_classification_report(score)
+    score = classification_report(y, y_pred)
+    print(score)
+    plot_classification_report(score)
 
-        roc_auc = roc_auc_score(y[i], y_pred)
-        # print("ROC-AUC Score:", roc_auc)
+    roc_auc = roc_auc_score(y, y_pred)
+    # print("ROC-AUC Score:", roc_auc)
 
-        fpr, tpr, thresholds = roc_curve(y[i], y_pred)
-        plt.figure(figsize=(8, 6))
-        plt.plot(fpr, tpr, color='orange', lw=2, label='ROC Curve (area = %0.2f)' % roc_auc)
-        plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title('Receiver Operating Characteristic (ROC) Curve')
-        plt.legend(loc="lower right")
-        plt.show()
+    fpr, tpr, thresholds = roc_curve(y, y_pred)
+    plt.figure(figsize=(8, 6))
+    plt.plot(fpr, tpr, color='orange', lw=2, label='ROC Curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver Operating Characteristic (ROC) Curve')
+    plt.legend(loc="lower right")
+    plt.show()
 
 
 if __name__ == '__main__':
