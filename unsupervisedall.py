@@ -8,15 +8,25 @@ from sklearn.metrics import classification_report, make_scorer, f1_score, precis
     roc_curve
 from sklearn.ensemble import IsolationForest
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.svm import OneClassSVM
 from main import myprint, file_path, read_parquet_dataset, data_balancing
 import seaborn as sns
 
+pd.set_option('display.width', None)
+
+feature = ['Protocol', 'Flow Duration', 'Fwd Pkt Len Max', 'Fwd Pkt Len Min', 'Fwd Pkt Len Mean', 'Fwd Pkt Len Std',
+           'Bwd Pkt Len Max', 'Bwd Pkt Len Min', 'Bwd Pkt Len Mean', 'Bwd Pkt Len Std', 'Flow IAT Mean', 'Flow IAT Std', 'Flow IAT Max',
+           'Flow IAT Min', 'Fwd IAT Mean', 'Fwd IAT Std', 'Fwd IAT Max', 'Fwd IAT Min', 'Bwd IAT Mean', 'Bwd IAT Std', 'Bwd IAT Max',
+           'Bwd IAT Min', 'Pkt Len Min', 'Pkt Len Max', 'Pkt Len Mean', 'Pkt Len Std', 'Pkt Len Var', 'FIN Flag Cnt', 'SYN Flag Cnt',
+           'RST Flag Cnt', 'PSH Flag Cnt', 'ACK Flag Cnt', 'URG Flag Cnt', 'CWE Flag Count', 'ECE Flag Cnt', 'Down/Up Ratio',
+           'Pkt Size Avg', 'Fwd Seg Size Avg', 'Bwd Seg Size Avg', 'Fwd Byts/b Avg', 'Fwd Pkts/b Avg', 'Fwd Blk Rate Avg', 'Bwd Byts/b Avg',
+           'Bwd Pkts/b Avg', 'Bwd Blk Rate Avg', 'Active Mean', 'Active Std', 'Active Max', 'Active Min', 'Idle Mean', 'Idle Std', 'Idle Max', 'Idle Min']
+
 
 def data_preprocessing(data):
-    df = pd.concat(data, axis=0)
-
+    dff = pd.concat(data, axis=0)
+    df = dff.drop(feature, axis=1)
     categories = ['Bot', 'FTP-BruteForce', 'SSH-Bruteforce', 'DDoS attacks-LOIC-HTTP', 'DDOS attack-LOIC-UDP',
                   'DDOS attack-HOIC', 'DoS attacks-Slowloris', 'DoS attacks-GoldenEye', 'DoS attacks-SlowHTTPTest',
                   'DoS attacks-Hulk', 'Infilteration', 'SQL Injection', 'Brute Force -XSS', 'Brute Force -Web']
@@ -52,7 +62,7 @@ def data_preprocessing(data):
 
     cols_to_drop = [item for item, count in item_counts.items() if count > 5]
 
-    x = uSample.drop(cols_to_drop + ['Protocol', 'Label'], axis=1)
+    x = uSample.drop(cols_to_drop + ['Label'], axis=1)
 
     return x, y
     # corr_matrix = Xd[0].corr(method='pearson')
@@ -64,8 +74,10 @@ def data_preprocessing(data):
 
 def scaling(data):
     scaler = StandardScaler()
+    mscaler = MinMaxScaler()
+    mscaled = mscaler.fit_transform(data)
     scaled_d = scaler.fit_transform(data)
-    return scaled_d
+    return mscaled
 
 
 def plot_classification_report(report):
@@ -111,8 +123,7 @@ def plot_isolation_forest_pca(clf, trx, n_components=2):
 
 
 def predict(x, y):
-
-    clf = IsolationForest(random_state=42, n_jobs=-1, n_estimators=50)
+    clf = IsolationForest(random_state=0, n_jobs=-1, n_estimators=50)
 
     [clf.fit(x) for k in range(3)]
     plot_isolation_forest_pca(clf, x)
@@ -122,8 +133,8 @@ def predict(x, y):
 
     score = classification_report(y, y_pred)
     print(score)
-    plot_classification_report(score)
 
+    plot_classification_report(score)
     roc_auc = roc_auc_score(y, y_pred)
     # print("ROC-AUC Score:", roc_auc)
 
