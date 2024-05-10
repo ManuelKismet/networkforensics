@@ -179,9 +179,17 @@ def tune_hyperparameters(X, y):
         }
         clf = IsolationForest(random_state=42)
         grid_search = GridSearchCV(clf, param_grid, cv=3, scoring='roc_auc', n_jobs=-1)
-        grid_search.fit(X, y)
+
+        num_samples = int(0.1 * len(X))  # 10% of X
+        indices = np.random.choice(np.arange(len(X)), size=num_samples, replace=False)
+        X_sample = X[indices]
+        y_sample = y[indices]
+
+        grid_search.fit(X_sample, y_sample)
         logging.info("Best hyperparameters found.")
+
         return grid_search.best_estimator_
+    
     except Exception as e:
         logging.error(f"Error during hyperparameter tuning: {e}")
         raise
