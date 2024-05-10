@@ -2,30 +2,35 @@ import argparse
 import datetime as dt
 import os
 import subprocess
+
+import pyshark
 from scapy.all import *
 from sklearn.ensemble import IsolationForest
+from nfstream import NFStreamer
+import pandas as pd
+
+pd.set_option('display.width', None)
 
 
-
-# Load the trained Isolation Forest model
-def load_model(model_path):
-    # Load the trained model from file
-    model = IsolationForest()
-    model.load_model(model_path)
-    return model
+# def capture_traffic(eth):
+#     streamer = NFStreamer(eth, statistical_analysis=True)
+#     my_dataframe = streamer.to_pandas(columns_to_anonymize=[])
+#     print(my_dataframe.head())
 
 
-def capture_packets(interface, duration, output_file):
+def capture_packets(interface, duration):
     # print(ifaces)
     # start_time = dt.datetime.now()
     # end_time = start_time + dt.timedelta(seconds=duration)
 
     packets = sniff(iface=interface, count=0, timeout=duration)
-    for pkt in packets:
-        print(pkt.fields)
-    print(packets[0].show())
-    wrpcap(output_file, packets)
-    print(f"Captured {len(packets)} packets and stored in {output_file}")
+    # df = packets.to_pandas()
+    print(packets[0].fields)
+    # for pkt in packets:
+    #     print(pkt.fields)
+    # print(packets[0].show())
+    # wrpcap(output_file, packets)
+    # print(f"Captured {len(packets)} packets and stored in {output_file}")
 
 
 # def analyze_packets(pcap_file):
@@ -70,8 +75,8 @@ def capture_packets(interface, duration, output_file):
 
 
 if __name__ == "__main__":
-    capture_packets('Intel(R) Dual Band Wireless-AC 8260', 10, 'output.pcap')
-
+    # capture_traffic('Intel(R) Dual Band Wireless-AC 8260')
+    capture_packets('Intel(R) Dual Band Wireless-AC 8260', 10,)
 
 #
 # import numpy as np
