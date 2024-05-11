@@ -1,5 +1,6 @@
 import argparse
 import datetime as dt
+import multiprocessing
 import os
 import subprocess
 
@@ -14,9 +15,10 @@ from joblib import load
 pd.set_option('display.width', None)
 
 
-def load_model():
+def model_predict(flow):
     model = load('unsup_anom_mod.joblib')
-    return model
+    pred = model.predict(flow.values.reshape(1, -1))
+    return pred
 
 
 class PacketMetrics(NFPlugin):
@@ -111,24 +113,72 @@ class PacketMetrics(NFPlugin):
 def capture_traffic(eth):
     col = ['id', 'expiration_id', 'src_ip', 'src_mac', 'src_oui', 'src_port', 'dst_ip', 'dst_mac', 'dst_oui',
            'dst_port', 'protocol', 'ip_version', 'vlan_id', 'tunnel_id', 'bidirectional_first_seen_ms',
-           'bidirectional_last_seen_ms', 'bidirectional_duration_ms', 'bidirectional_packets', 'bidirectional_bytes', 'src2dst_first_seen_ms',
+           'bidirectional_last_seen_ms', 'bidirectional_duration_ms', 'bidirectional_packets', 'bidirectional_bytes',
+           'src2dst_first_seen_ms',
            'src2dst_last_seen_ms', 'src2dst_duration_ms', 'src2dst_packets', 'src2dst_bytes', 'dst2src_first_seen_ms',
            'dst2src_last_seen_ms', 'dst2src_duration_ms', 'dst2src_packets', 'dst2src_bytes', 'bidirectional_min_ps',
            'bidirectional_mean_ps', 'bidirectional_stddev_ps', 'bidirectional_max_ps', 'src2dst_min_ps',
-           'src2dst_mean_ps', 'src2dst_stddev_ps', 'src2dst_max_ps', 'dst2src_min_ps', 'dst2src_mean_ps', 'dst2src_stddev_ps',
-           'src2dst_rst_packets', 'src2dst_fin_packets', 'dst2src_syn_packets', 'dst2src_cwr_packets', 'dst2src_ece_packets',
-           'dst2src_urg_packets', 'dst2src_ack_packets', 'dst2src_psh_packets', 'dst2src_rst_packets', 'dst2src_fin_packets',
-           'application_name', 'application_category_name', 'application_is_guessed', 'application_confidence', 'requested_server_name',
-           'client_fingerprint', 'server_fingerprint', 'user_agent', 'content_type', 'dst2src_max_ps',  'bidirectional_min_piat_ms',
-           'bidirectional_mean_piat_ms',  'bidirectional_stddev_piat_ms',  'bidirectional_max_piat_ms',  'src2dst_min_piat_ms',  'src2dst_mean_piat_ms',
-           'src2dst_stddev_piat_ms',  'src2dst_max_piat_ms',  'dst2src_min_piat_ms',  'dst2src_mean_piat_ms',  'dst2src_stddev_piat_ms',  'dst2src_max_piat_ms',
-           'bidirectional_syn_packets',  'bidirectional_cwr_packets',  'bidirectional_ece_packets',  'bidirectional_urg_packets',  'bidirectional_ack_packets',
-           'bidirectional_psh_packets',  'bidirectional_rst_packets',  'bidirectional_fin_packets',  'src2dst_syn_packets',  'src2dst_cwr_packets',
-           'src2dst_ece_packets',  'src2dst_urg_packets',  'src2dst_ack_packets',  'src2dst_psh_packets']
+           'src2dst_mean_ps', 'src2dst_stddev_ps', 'src2dst_max_ps', 'dst2src_min_ps', 'dst2src_mean_ps',
+           'dst2src_stddev_ps',
+           'src2dst_rst_packets', 'src2dst_fin_packets', 'dst2src_syn_packets', 'dst2src_cwr_packets',
+           'dst2src_ece_packets',
+           'dst2src_urg_packets', 'dst2src_ack_packets', 'dst2src_psh_packets', 'dst2src_rst_packets',
+           'dst2src_fin_packets',
+           'application_name', 'application_category_name', 'application_is_guessed', 'application_confidence',
+           'requested_server_name',
+           'client_fingerprint', 'server_fingerprint', 'user_agent', 'content_type', 'dst2src_max_ps',
+           'bidirectional_min_piat_ms',
+           'bidirectional_mean_piat_ms', 'bidirectional_stddev_piat_ms', 'bidirectional_max_piat_ms',
+           'src2dst_min_piat_ms', 'src2dst_mean_piat_ms',
+           'src2dst_stddev_piat_ms', 'src2dst_max_piat_ms', 'dst2src_min_piat_ms', 'dst2src_mean_piat_ms',
+           'dst2src_stddev_piat_ms', 'dst2src_max_piat_ms',
+           'bidirectional_syn_packets', 'bidirectional_cwr_packets', 'bidirectional_ece_packets',
+           'bidirectional_urg_packets', 'bidirectional_ack_packets',
+           'bidirectional_psh_packets', 'bidirectional_rst_packets', 'bidirectional_fin_packets', 'src2dst_syn_packets',
+           'src2dst_cwr_packets',
+           'src2dst_ece_packets', 'src2dst_urg_packets', 'src2dst_ack_packets', 'src2dst_psh_packets']
     plugin_instance = PacketMetrics()
     streamer = NFStreamer(eth, udps=[plugin_instance], statistical_analysis=True)
-    my_dataframe = streamer.to_pandas()
-    print(my_dataframe.drop(col, axis=1))
+
+    for flow in streamer:
+        flow_data = {'Tot Fwd Pkts': flow.udps.tot_fwd_pkts,
+                     'Tot Bwd Pkts': flow.udps.tot_bwd_pkts,
+                     'TotLen Fwd Pkts': flow.udps.total_len_fwd_packets,
+                     'TotLen Bwd Pkts': flow.udps.total_len_bwd_packets,
+                     'Flow Byts/s': flow.udps.flow_bytes_sec,
+                     'Flow Pkts/s': flow.udps.flow_pkts_sec,
+                     'Fwd IAT Tot': flow.udps.total_fwd_iat,
+                     'Bwd IAT Tot': flow.udps.total_fwd_iat,
+                     'Fwd Header Len': flow.udps.fwd_header_length,
+                     'Bwd Header Len': flow.udps.bwd_header_length,
+                     'Fwd Pkts/s': flow.udps.fwd_pkts_sec,
+                     'Bwd Pkts/s': flow.udps.bwd_pkts_sec,
+                     'Fwd Act Data Pkts': flow.udps.fwd_act_data_pkts,
+                     'Fwd Seg Size Avg': flow.udps.fwd_seg_siz_avg,
+                     'Bwd Seg Size Avg': flow.udps.bwd_seg_siz_avg,
+                     'Pkt Size Avg': flow.udps.pkt_size_avg}
+
+        flow_df = pd.DataFrame([flow_data])
+        flow_df = flow_df.drop(columns=col, errors='ignore')
+        prediction = model_predict(flow_df)
+        if prediction == -1:
+            process = multiprocessing.Process(target=capture_packets, args=(flow,))
+            process.start()
+            process.join()
+
+
+def capture_packets(flow):
+    capture_filter = f"ip src {flow.src_ip} and ip dst {flow.dst_ip}"
+    capture = pyshark.LiveCapture(display_filter=capture_filter)
+
+    captured_packets = []
+
+    for pkt in capture.sniff_continuously(packet_count=10):
+        captured_packets.append(pkt)
+
+    pcap_filename = f"captured_packets_flow_{flow.id}.pcap"
+    wrpcap(pcap_filename, captured_packets)
+    print(f"Captured packets saved to '{pcap_filename}'")
 
 
 # def analyze_packets(pcap_file):
@@ -175,63 +225,3 @@ def capture_traffic(eth):
 if __name__ == "__main__":
     # capture_traffic('Intel(R) Dual Band Wireless-AC 8260')
     capture_traffic('Intel(R) Dual Band Wireless-AC 8260')
-
-#
-# import numpy as np
-# import pandas as pd
-# from sklearn.ensemble import IsolationForest
-#
-# # Load the trained Isolation Forest model
-# def load_model(model_path):
-#     # Load the trained model from file
-#     model = IsolationForest()
-#     model.load_model(model_path)
-#     return model
-#
-# # Preprocess incoming packet data
-# def preprocess_packet(packet):
-#     # Extract relevant features from the packet
-#     # Preprocess the packet data to match the format used during model training
-#     features = extract_features(packet)
-#     return features
-#
-# # Perform real-time anomaly detection
-# def detect_anomalies(packet, model):
-#     # Preprocess the incoming packet data
-#     features = preprocess_packet(packet)
-#     # Predict the anomaly score for the packet using the loaded model
-#     anomaly_score = model.predict(features)
-#     return anomaly_score
-#
-# # Define a threshold for anomaly detection
-# THRESHOLD = -0.5
-#
-# # Function to trigger alert based on anomaly score
-# def trigger_alert(anomaly_score):
-#     if anomaly_score < THRESHOLD:
-#         print("Anomaly detected! Triggering alert...")
-#
-# # Main function to simulate real-time packet analysis
-# def main():
-#     # Load the trained Isolation Forest model
-#     model_path = 'trained_model.pkl'
-#     model = load_model(model_path)
-#
-#     # Simulate incoming packet data (replace with actual data source)
-#     packet_stream = generate_packet_stream()
-#
-#     # Process incoming packets and perform real-time anomaly detection
-#     for packet in packet_stream:
-#         # Perform anomaly detection on the current packet
-#         anomaly_score = detect_anomalies(packet, model)
-#         # Trigger alert if anomaly score exceeds threshold
-#         trigger_alert(anomaly_score)
-#
-# # Function to generate simulated packet stream (replace with actual data source)
-# def generate_packet_stream():
-#     # Simulate generation of packet data
-#     packet_stream = [np.random.rand(61) for _ in range(1000)]  # Example: 1000 packets with 61 features each
-#     return packet_stream
-#
-# if __name__ == "__main__":
-#     main()

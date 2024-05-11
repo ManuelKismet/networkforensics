@@ -21,7 +21,7 @@ feature = ['Protocol', 'Flow Duration', 'Fwd Pkt Len Max', 'Fwd Pkt Len Min', 'F
            'Flow IAT Min', 'Fwd IAT Mean', 'Fwd IAT Std', 'Fwd IAT Max', 'Fwd IAT Min', 'Bwd IAT Mean', 'Bwd IAT Std', 'Bwd IAT Max', 'Subflow Bwd Pkts',
            'Bwd IAT Min', 'Pkt Len Min', 'Pkt Len Max', 'Pkt Len Mean', 'Pkt Len Std', 'Pkt Len Var', 'FIN Flag Cnt', 'SYN Flag Cnt', 'Subflow Bwd Byts', 'Fwd Seg Size Min',
            'RST Flag Cnt', 'ACK Flag Cnt', 'URG Flag Cnt', 'CWE Flag Count', 'ECE Flag Cnt', 'Down/Up Ratio', 'Init Fwd Win Byts', 'PSH Flag Cnt',
-           'Fwd Byts/b Avg', 'Fwd Pkts/b Avg', 'Fwd Blk Rate Avg', 'Bwd Byts/b Avg', 'Init Bwd Win Byts',
+           'Fwd Byts/b Avg', 'Fwd Pkts/b Avg', 'Fwd Blk Rate Avg', 'Bwd Byts/b Avg', 'Init Bwd Win Byts', 'Fwd PSH Flags',  'Bwd PSH Flags',  'Fwd URG Flags',  'Bwd URG Flags',
            'Bwd Pkts/b Avg', 'Bwd Blk Rate Avg', 'Active Mean', 'Active Std', 'Active Max', 'Active Min', 'Idle Mean', 'Idle Std', 'Idle Max', 'Idle Min']
 
 
@@ -151,8 +151,7 @@ def predict(x, y):
     plt.legend(loc="lower right")
     plt.show()
 
-    model = clf
-    dump(model, 'unsup_anom_mod.joblib')
+    return clf
 
 
 if __name__ == '__main__':
@@ -160,4 +159,5 @@ if __name__ == '__main__':
     p_data = read_parquet_dataset(paths)
     X_data, y_data = data_preprocessing(p_data)
     scaled = scaling(X_data)
-    predict(scaled, y_data)
+    model = predict(scaled, y_data)
+    dump(model, 'unsup_anom_mod.joblib')
