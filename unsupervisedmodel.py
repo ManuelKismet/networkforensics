@@ -12,6 +12,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.svm import OneClassSVM
 from main import myprint, file_path, read_parquet_dataset, data_balancing
 import seaborn as sns
+from joblib import dump
 
 pd.set_option('display.width', None)
 
@@ -149,6 +150,9 @@ def predict(x, y):
     plt.title('Receiver Operating Characteristic (ROC) Curve')
     plt.legend(loc="lower right")
     plt.show()
+
+    model = clf
+    dump(model, 'unsup_anom_mod.joblib')
 
 
 if __name__ == '__main__':
