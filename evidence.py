@@ -1,7 +1,10 @@
 import argparse
 import datetime as dt
+import json
 import multiprocessing
 import os
+import time
+
 from Crypto.Cipher import AES
 import hashlib
 import subprocess
@@ -9,6 +12,7 @@ import subprocess
 import pyshark
 import pyshark.capture
 from scapy.all import *
+from scapy.layers.inet import *
 from sklearn.ensemble import IsolationForest
 from nfstream import NFStreamer, NFPlugin
 
@@ -141,33 +145,40 @@ def capture_traffic(eth):
            'src2dst_cwr_packets',
            'src2dst_ece_packets', 'src2dst_urg_packets', 'src2dst_ack_packets', 'src2dst_psh_packets']
     plugin_instance = PacketMetrics()
-    streamer = NFStreamer(eth, udps=[plugin_instance], statistical_analysis=True)
-
-    for flow in streamer:
-        flow_data = {'Tot Fwd Pkts': flow.udps.tot_fwd_pkts,
-                     'Tot Bwd Pkts': flow.udps.tot_bwd_pkts,
-                     'TotLen Fwd Pkts': flow.udps.total_len_fwd_packets,
-                     'TotLen Bwd Pkts': flow.udps.total_len_bwd_packets,
-                     'Flow Byts/s': flow.udps.flow_bytes_sec,
-                     'Flow Pkts/s': flow.udps.flow_pkts_sec,
-                     'Fwd IAT Tot': flow.udps.total_fwd_iat,
-                     'Bwd IAT Tot': flow.udps.total_fwd_iat,
-                     'Fwd Header Len': flow.udps.fwd_header_length,
-                     'Bwd Header Len': flow.udps.bwd_header_length,
-                     'Fwd Pkts/s': flow.udps.fwd_pkts_sec,
-                     'Bwd Pkts/s': flow.udps.bwd_pkts_sec,
-                     'Fwd Act Data Pkts': flow.udps.fwd_act_data_pkts,
-                     'Fwd Seg Size Avg': flow.udps.fwd_seg_siz_avg,
-                     'Bwd Seg Size Avg': flow.udps.bwd_seg_siz_avg,
-                     'Pkt Size Avg': flow.udps.pkt_size_avg}
-
-        flow_df = pd.DataFrame([flow_data])
-        flow_df = flow_df.drop(columns=col, errors='ignore')
-        prediction = model_predict(flow_df)
-        if prediction == -1:
-            process = multiprocessing.Process(target=capture_packets(flow), args=(flow,))
-            process.start()
-            process.join()
+    try:
+        streamer = NFStreamer(eth, udps=[plugin_instance], statistical_analysis=True)
+        print('streamer pass')
+        for flow in streamer:
+            flow_data = {'Tot Fwd Pkts': flow.udps.tot_fwd_pkts,
+                         'Tot Bwd Pkts': flow.udps.tot_bwd_pkts,
+                         'TotLen Fwd Pkts': flow.udps.total_len_fwd_packets,
+                         'TotLen Bwd Pkts': flow.udps.total_len_bwd_packets,
+                         'Flow Byts/s': flow.udps.flow_bytes_sec,
+                         'Flow Pkts/s': flow.udps.flow_pkts_sec,
+                         'Fwd IAT Tot': flow.udps.total_fwd_iat,
+                         'Bwd IAT Tot': flow.udps.total_fwd_iat,
+                         'Fwd Header Len': flow.udps.fwd_header_length,
+                         'Bwd Header Len': flow.udps.bwd_header_length,
+                         'Fwd Pkts/s': flow.udps.fwd_pkts_sec,
+                         'Bwd Pkts/s': flow.udps.bwd_pkts_sec,
+                         'Fwd Act Data Pkts': flow.udps.fwd_act_data_pkts,
+                         'Fwd Seg Size Avg': flow.udps.fwd_seg_siz_avg,
+                         'Bwd Seg Size Avg': flow.udps.bwd_seg_siz_avg,
+                         'Pkt Size Avg': flow.udps.pkt_size_avg}
+            flow_df = pd.DataFrame([flow_data])
+            print('flow data to pandas done')
+            flow_df = flow_df.drop(columns=col, errors='ignore')
+            print('columns dropped')
+            prediction = model_predict(flow_df)
+            print('predict pass')
+            if prediction == -1:
+                process = multiprocessing.Process(target=capture_packets, args=(flow,))
+                process.start()
+                print('process started')
+                process.join()
+                print('process joined')
+    except Exception as e:
+        print('streamer failed', e)
 
 
 def encrypt_packet(packt, key):
@@ -176,26 +187,61 @@ def encrypt_packet(packt, key):
     return ciphertext, tag
 
 
-def capture_packets(flow, encryption_key):
+def capture_packets(flow):
     capture_filter = f"src {flow.src_ip} and dst {flow.dst_ip}"
     captured_packets = sniff(filter=capture_filter, count=10)
+    print('packets captureds')
 
-    # Encrypt and calculate integrity for each packet
-    encrypted_packets = []
-    integrity_hashes = []
-    for packet in captured_packets:
-        ciphertext, tag = encrypt_packet(bytes(packet), encryption_key)
-        encrypted_packets.append(ciphertext)
-        integrity_hashes.append(hashlib.sha256(ciphertext + tag).digest())
+    analyze_packet(captured_packets)
+    print('analysing packet')
 
-    # Save encrypted packets and integrity hashes to PCAP file
     pcap_filename = f"captured_packets_flow_{flow.id}.pcap"
-    with open(pcap_filename, "wb") as pcap_file:
-        for encrypted_packet, integrity_hash in zip(encrypted_packets, integrity_hashes):
-            pcap_file.write(encrypted_packet)
-            pcap_file.write(integrity_hash)
-
+    wrpcap(pcap_filename, captured_packets)
     print(f"Captured packets saved to '{pcap_filename}'")
+    # ciphertext, tag = encrypt_packet(bytes(captured_packets), encryption_key)
+    # _hash = hashlib.sha256(ciphertext).digest()
+    #
+    # en_file = f"encrypted_{flow.id}.enc"
+    # with open(en_file, "wb") as ef:
+    #     ef.write(ciphertext + tag + _hash)
+    #
+    # print(f"Captured packets saved to '{en_file}'")
+
+
+def analyze_packet(capture):
+    evidence = []
+    for pkt in capture:
+        print('packet recieved extracting evidence')
+        packet_info = {
+            "src_ip": pkt[IP].src if IP in pkt else "No IP Layer",
+            "dst_ip": pkt[IP].dst if IP in pkt else "No IP Layer",
+            "src_port": pkt[IP].sport if TCP in pkt or UDP in pkt else "N/A",
+            "dst_port": pkt[IP].dport if TCP in pkt or UDP in pkt else "N/A",
+            "protocol": pkt.proto if IP in pkt else "No Protocol Info",
+            "timestamp": pkt.time,
+            "tcp_flags": pkt[TCP].flags if TCP in pkt else "No TCP",
+            "payload": bytes(pkt[TCP].payload) if TCP in pkt and Raw in pkt[TCP] else "No Payload",
+            "packet_size": len(pkt)
+        }
+        evidence.append(packet_info)
+        print('evidence appended')
+    generate_forensic_report(evidence)
+    print('generating report')
+    return evidence
+
+
+def generate_forensic_report(evidence):
+    report_content = {
+        "Executive Summary": "Network traffic revealed potential security anomalies that warrant further examination.",
+        "Background": "Automated monitoring system detected unusual traffic patterns, prompting this forensic analysis.",
+        "Detailed Findings": evidence,
+        "Conclusion and Recommendations": "Further analysis of the attached PCAP file is recommended ",
+    }
+
+    # Save the report to a text file
+    with open('report_file', 'w') as report_file:
+        json.dump(report_content, report_file, indent=4)
+    print(f"Forensic report generated: {report_file}{time.time()}")
 
 
 # def capture_packets(flow):
@@ -205,47 +251,6 @@ def capture_packets(flow, encryption_key):
 #     pcap_filename = f"captured_packets_flow_{flow.id}.pcap"
 #     wrpcap(pcap_filename, captured_packets)
 #     print(f"Captured packets saved to '{pcap_filename}'")
-
-
-# def analyze_packets(pcap_file):
-#     packets = rdpcap(pcap_file)
-#
-#     print(f"Analyzing {len(packets)} packets from {pcap_file}...")
-#
-#     # Packet analysis and filtering
-#     tcp_packets = [pkt for pkt in packets if pkt.haslayer(TCP)]
-#     print(f"TCP packets: {len(tcp_packets)}")
-#
-#     http_packets = [pkt for pkt in packets if pkt.haslayer(HTTPRequest)]
-#     print(f"HTTP requests: {len(http_packets)}")
-#
-#     for http_pkt in http_packets:
-#         print(f"HTTP Request: {http_pkt[HTTPRequest].Host.decode()} {http_pkt[HTTPRequest].Path.decode()}")
-#
-#     # Additional analysis and filtering as needed
-
-
-# def main():
-#     parser = argparse.ArgumentParser(description="Network Forensic Evidence Collection")
-#     parser.add_argument("-i", "--interface", required=True, help="Network interface to capture packets from")
-#     parser.add_argument("-d", "--duration", type=int, default=60, help="Duration of packet capture in seconds")
-#     parser.add_argument("-o", "--output", default="capture.pcap", help="Output PCAP file name")
-# #    parser.add_argument("-a", "--analyze", action="store_true", help="Analyze the captured PCAP file")
-#
-#     args = parser.parse_args()
-#
-#     if not os.geteuid() == 0:
-#         print("This script requires root privileges.")
-#         sys.exit(1)
-#
-#     # if args.analyze:
-#     #     if os.path.exists(args.output):
-#     #         analyze_packets(args.output)
-#     #     else:
-#     #         print(f"PCAP file {args.output} not found.")
-#     else:
-#         output_file = f"{args.output}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.pcap"
-#         capture_packets(args.interface, args.duration, output_file)
 
 
 if __name__ == "__main__":
