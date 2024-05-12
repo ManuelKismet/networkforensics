@@ -2,9 +2,12 @@ import argparse
 import datetime as dt
 import multiprocessing
 import os
+from Crypto.Cipher import AES
+import hashlib
 import subprocess
 
 import pyshark
+import pyshark.capture
 from scapy.all import *
 from sklearn.ensemble import IsolationForest
 from nfstream import NFStreamer, NFPlugin
@@ -162,23 +165,46 @@ def capture_traffic(eth):
         flow_df = flow_df.drop(columns=col, errors='ignore')
         prediction = model_predict(flow_df)
         if prediction == -1:
-            process = multiprocessing.Process(target=capture_packets, args=(flow,))
+            process = multiprocessing.Process(target=capture_packets(flow), args=(flow,))
             process.start()
             process.join()
 
 
-def capture_packets(flow):
-    capture_filter = f"ip src {flow.src_ip} and ip dst {flow.dst_ip}"
-    capture = pyshark.LiveCapture(display_filter=capture_filter)
+def encrypt_packet(packt, key):
+    cipher = AES.new(key, AES.MODE_EAX)
+    ciphertext, tag = cipher.encrypt_and_digest(packt)
+    return ciphertext, tag
 
-    captured_packets = []
 
-    for pkt in capture.sniff_continuously(packet_count=10):
-        captured_packets.append(pkt)
+def capture_packets(flow, encryption_key):
+    capture_filter = f"src {flow.src_ip} and dst {flow.dst_ip}"
+    captured_packets = sniff(filter=capture_filter, count=10)
 
+    # Encrypt and calculate integrity for each packet
+    encrypted_packets = []
+    integrity_hashes = []
+    for packet in captured_packets:
+        ciphertext, tag = encrypt_packet(bytes(packet), encryption_key)
+        encrypted_packets.append(ciphertext)
+        integrity_hashes.append(hashlib.sha256(ciphertext + tag).digest())
+
+    # Save encrypted packets and integrity hashes to PCAP file
     pcap_filename = f"captured_packets_flow_{flow.id}.pcap"
-    wrpcap(pcap_filename, captured_packets)
+    with open(pcap_filename, "wb") as pcap_file:
+        for encrypted_packet, integrity_hash in zip(encrypted_packets, integrity_hashes):
+            pcap_file.write(encrypted_packet)
+            pcap_file.write(integrity_hash)
+
     print(f"Captured packets saved to '{pcap_filename}'")
+
+
+# def capture_packets(flow):
+#     capture_filter = f"src {flow.src_ip} and dst {flow.dst_ip}"
+#     captured_packets = sniff(filter=capture_filter, count=10)
+#
+#     pcap_filename = f"captured_packets_flow_{flow.id}.pcap"
+#     wrpcap(pcap_filename, captured_packets)
+#     print(f"Captured packets saved to '{pcap_filename}'")
 
 
 # def analyze_packets(pcap_file):
