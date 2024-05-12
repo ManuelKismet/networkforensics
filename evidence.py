@@ -118,6 +118,7 @@ class PacketMetrics(NFPlugin):
 
 
 def capture_traffic(eth):
+    key = os.urandom(16)
     col = ['id', 'expiration_id', 'src_ip', 'src_mac', 'src_oui', 'src_port', 'dst_ip', 'dst_mac', 'dst_oui',
            'dst_port', 'protocol', 'ip_version', 'vlan_id', 'tunnel_id', 'bidirectional_first_seen_ms',
            'bidirectional_last_seen_ms', 'bidirectional_duration_ms', 'bidirectional_packets', 'bidirectional_bytes',
@@ -172,11 +173,9 @@ def capture_traffic(eth):
             prediction = model_predict(flow_df)
             print('predict pass')
             if prediction == -1:
-                process = multiprocessing.Process(target=capture_packets, args=(flow,))
+                process = multiprocessing.Process(target=capture_packets, args=(flow, key))
                 process.start()
                 print('process started')
-                process.join()
-                print('process joined')
     except Exception as e:
         print('streamer failed', e)
 
@@ -187,9 +186,10 @@ def encrypt_packet(packt, key):
     return ciphertext, tag
 
 
-def capture_packets(flow):
+def capture_packets(flow, key):
+
     capture_filter = f"src {flow.src_ip} and dst {flow.dst_ip}"
-    captured_packets = sniff(filter=capture_filter, count=10)
+    captured_packets = sniff(filter=capture_filter, count=5)
     print('packets captureds')
 
     analyze_packet(captured_packets)
@@ -198,14 +198,18 @@ def capture_packets(flow):
     pcap_filename = f"captured_packets_flow_{flow.id}.pcap"
     wrpcap(pcap_filename, captured_packets)
     print(f"Captured packets saved to '{pcap_filename}'")
-    # ciphertext, tag = encrypt_packet(bytes(captured_packets), encryption_key)
-    # _hash = hashlib.sha256(ciphertext).digest()
-    #
-    # en_file = f"encrypted_{flow.id}.enc"
-    # with open(en_file, "wb") as ef:
-    #     ef.write(ciphertext + tag + _hash)
-    #
-    # print(f"Captured packets saved to '{en_file}'")
+
+    packet_bytes = b''.join(bytes(pkt) for pkt in captured_packets)
+
+    ciphertext, tag = encrypt_packet(bytes_encode(packet_bytes), key)
+    print('encryption of packet done')
+    _hash = hashlib.sha256(ciphertext).digest()
+    print('hash generated')
+
+    en_file = f"encrypted_{flow.id}.enc"
+    with open(en_file, "wb") as ef:
+        ef.write(ciphertext + tag + _hash)
+    print(f"Captured packets saved to '{en_file}'")
 
 
 def analyze_packet(capture):
@@ -227,21 +231,24 @@ def analyze_packet(capture):
         print('evidence appended')
     generate_forensic_report(evidence)
     print('generating report')
+    print(type(evidence))
     return evidence
 
 
-def generate_forensic_report(evidence):
+def generate_forensic_report(evidence_):
+    print(type(evidence_), 'report evidence')
     report_content = {
         "Executive Summary": "Network traffic revealed potential security anomalies that warrant further examination.",
         "Background": "Automated monitoring system detected unusual traffic patterns, prompting this forensic analysis.",
-        "Detailed Findings": evidence,
-        "Conclusion and Recommendations": "Further analysis of the attached PCAP file is recommended ",
+        "Detailed Findings": evidence_,
+        "Conclusion and Recommendations": "Further analysis of the attached PCAP file is recommended "
     }
 
     # Save the report to a text file
-    with open('report_file', 'w') as report_file:
+    rfile = f'report_file{time.time()}.json'
+    with open(rfile, 'w') as report_file:
         json.dump(report_content, report_file, indent=4)
-    print(f"Forensic report generated: {report_file}{time.time()}")
+    print(f"Forensic report generated:{rfile}")
 
 
 # def capture_packets(flow):
