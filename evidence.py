@@ -4,16 +4,15 @@ import json
 import multiprocessing
 import os
 import time
+import win32evtlog
+import win32con
+import re
 
 from Crypto.Cipher import AES
 import hashlib
-import subprocess
 
-import pyshark
-import pyshark.capture
 from scapy.all import *
 from scapy.layers.inet import *
-from sklearn.ensemble import IsolationForest
 from nfstream import NFStreamer, NFPlugin
 
 import pandas as pd
@@ -118,6 +117,9 @@ class PacketMetrics(NFPlugin):
 
 
 def capture_traffic(eth):
+    server = 'localhost'
+    logtype = 'Security'
+    # log_queue = multiprocessing.Queue()
     key = os.urandom(16)
     col = ['id', 'expiration_id', 'src_ip', 'src_mac', 'src_oui', 'src_port', 'dst_ip', 'dst_mac', 'dst_oui',
            'dst_port', 'protocol', 'ip_version', 'vlan_id', 'tunnel_id', 'bidirectional_first_seen_ms',
@@ -173,7 +175,14 @@ def capture_traffic(eth):
             prediction = model_predict(flow_df)
             print('predict pass')
             if prediction == -1:
-                process = multiprocessing.Process(target=capture_packets, args=(flow, key))
+                log_data = forensic_data(get_forensic_logs(server, logtype))
+                # process_log = multiprocessing.Process(target=get_forensic_logs, args=(server, logtype, log_queue))
+                # process_log.start()
+                # process_log.join()
+                print('log process ends')
+                # log_data = log_queue.get()
+                # print('retrieved queued data')
+                process = multiprocessing.Process(target=capture_packets, args=(flow, key, log_data))
                 process.start()
                 print('process started')
     except Exception as e:
@@ -186,13 +195,12 @@ def encrypt_packet(packt, key):
     return ciphertext, tag
 
 
-def capture_packets(flow, key):
-
+def capture_packets(flow, key, logdata):
     capture_filter = f"src {flow.src_ip} and dst {flow.dst_ip}"
-    captured_packets = sniff(filter=capture_filter, count=5)
+    captured_packets = sniff(filter=capture_filter, count=10)
     print('packets captureds')
 
-    analyze_packet(captured_packets)
+    analyze_packet(captured_packets, logdata)
     print('analysing packet')
 
     pcap_filename = f"captured_packets_flow_{flow.id}.pcap"
@@ -212,7 +220,7 @@ def capture_packets(flow, key):
     print(f"Captured packets saved to '{en_file}'")
 
 
-def analyze_packet(capture):
+def analyze_packet(capture, logdat):
     evidence = []
     for pkt in capture:
         print('packet recieved extracting evidence')
@@ -229,18 +237,108 @@ def analyze_packet(capture):
         }
         evidence.append(packet_info)
         print('evidence appended')
-    generate_forensic_report(evidence)
+    generate_forensic_report(evidence, logdat)
     print('generating report')
     print(type(evidence))
     return evidence
 
 
-def generate_forensic_report(evidence_):
+def get_forensic_logs(server, logtype):
+    print('getting forensic logs')
+    hand = win32evtlog.OpenEventLog(server, logtype)
+    flags = win32evtlog.EVENTLOG_BACKWARDS_READ | win32evtlog.EVENTLOG_SEQUENTIAL_READ
+    forensic_data_ = []
+
+    try:
+        while True:
+            events = win32evtlog.ReadEventLog(hand, flags, 0)
+            if not events:
+                break
+            for event in events:
+                if event.EventID in [4663, 4688, 5156, 4104]:  # Handling multiple event types
+                    event_info = {
+                        "Time Generated": event.TimeGenerated.strftime('%Y-%m-%d %H:%M:%S'),
+                        "Event ID": event.EventID,
+                        "Source": event.SourceName,
+                        "Category": event.EventCategory,
+                        "Strings": event.StringInserts,
+                        "Computer": event.ComputerName
+                    }
+                    forensic_data_.append(event_info)
+    finally:
+        win32evtlog.CloseEventLog(hand)
+    print('logs queued')
+    # all_entries = forensic_data(forensic_data_)
+    return forensic_data_  # og_queue.put(all_entries) all_entries
+
+
+def analyze_powershell_script(script_text):
+    # Look for common malicious patterns
+    patterns = ['Invoke-Mimikatz', 'Invoke-Shellcode', 'DownloadString', 'Net.WebClient', 'Start-Process']
+    findings = [pattern for pattern in patterns if re.search(pattern, script_text, re.IGNORECASE)]
+    return findings
+
+
+def parse_details(strings, event_id):
+    if event_id == 4663:
+        return {
+            "Object Name": strings[5],
+            "Access Mask": strings[6],
+            "Process Name": strings[8]
+        }
+    elif event_id == 4688:
+        return {
+            "New Process Name": strings[4],
+            "Creator Process Name": strings[8],
+            "Process Command Line": strings[9] if len(strings) > 9 else "Not Available"
+        }
+    elif event_id == 5156:
+        return {
+            "Source IP": strings[2],
+            "Source Port": strings[3],
+            "Dest IP": strings[4],
+            "Dest Port": strings[5],
+            "Protocol": strings[6]
+        }
+    elif event_id == 4104:
+        findings = analyze_powershell_script(strings[1]) if len(strings) > 1 else []
+        print('analysing for mal behavior in powershell')
+        return {
+            "Script Block Text": strings[1] if len(strings) > 1 else "No Script Available",
+            "User": strings[0],
+            "Potential Malicious Activities": findings
+        }
+    return {}
+
+
+def forensic_data(data):
+    print('analysinz logs for forensic data')
+    all_entries = []
+    for entry in data:
+        details = parse_details(entry["Strings"], entry["Event ID"])
+        detail_entries = []
+        for key, value in details.items():
+            detail_entries.append({key: value})
+        log_evidence = {
+            "Time Generated": entry["Time Generated"],
+            "Event ID": entry["Event ID"],
+            "Source": entry["Source"],
+            "Category": entry["Category"],
+            "Computer": entry["Computer"],
+            "Details": detail_entries
+        }
+        all_entries.append(log_evidence)
+    print('data entries appended')
+    return all_entries
+
+
+def generate_forensic_report(evidence_, log_findings):
     print(type(evidence_), 'report evidence')
     report_content = {
         "Executive Summary": "Network traffic revealed potential security anomalies that warrant further examination.",
         "Background": "Automated monitoring system detected unusual traffic patterns, prompting this forensic analysis.",
         "Detailed Findings": evidence_,
+        "Log Findings": log_findings,
         "Conclusion and Recommendations": "Further analysis of the attached PCAP file is recommended "
     }
 

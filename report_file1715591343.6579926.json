@@ -1,0 +1,12 @@
+{
+    "Executive Summary": "Network traffic revealed potential security anomalies that warrant further examination.",
+    "Background": "Automated monitoring system detected unusual traffic patterns, prompting this forensic analysis.",
+    "Detailed Findings": [
+        {
+            "src_ip": "192.168.1.254",
+            "dst_ip": "192.168.1.188",
+            "src_port": 53,
+            "dst_port": 56328,
+            "protocol": 6,
+            "timestamp": 1715591343.61941,
+            "tcp_flags": 

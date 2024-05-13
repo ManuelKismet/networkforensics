@@ -1,0 +1,1199 @@
+{
+    "Executive Summary": "Network traffic revealed potential security anomalies that warrant further examination.",
+    "Background": "Automated monitoring system detected unusual traffic patterns, prompting this forensic analysis.",
+    "Detailed Findings": [
+        {
+            "src_ip": "192.168.1.188",
+            "dst_ip": "192.168.1.254",
+            "src_port": 54343,
+            "dst_port": 53,
+            "protocol": 17,
+            "timestamp": 1715591960.07252,
+            "tcp_flags": "No TCP",
+            "payload": "No Payload",
+            "packet_size": 87
+        },
+        {
+            "src_ip": "192.168.1.188",
+            "dst_ip": "192.168.1.254",
+            "src_port": 50217,
+            "dst_port": 53,
+            "protocol": 17,
+            "timestamp": 1715591964.590482,
+            "tcp_flags": "No TCP",
+            "payload": "No Payload",
+            "packet_size": 132
+        },
+        {
+            "src_ip": "192.168.1.188",
+            "dst_ip": "192.168.1.254",
+            "src_port": 56523,
+            "dst_port": 53,
+            "protocol": 17,
+            "timestamp": 1715591964.609829,
+            "tcp_flags": "No TCP",
+            "payload": "No Payload",
+            "packet_size": 87
+        },
+        {
+            "src_ip": "192.168.1.188",
+            "dst_ip": "192.168.1.254",
+            "src_port": 58316,
+            "dst_port": 53,
+            "protocol": 17,
+            "timestamp": 1715591966.087901,
+            "tcp_flags": "No TCP",
+            "payload": "No Payload",
+            "packet_size": 83
+        },
+        {
+            "src_ip": "192.168.1.188",
+            "dst_ip": "192.168.1.254",
+            "src_port": 56268,
+            "dst_port": 53,
+            "protocol": 17,
+            "timestamp": 1715591966.088298,
+            "tcp_flags": "No TCP",
+            "payload": "No Payload",
+            "packet_size": 83
+        },
+        {
+            "src_ip": "192.168.1.188",
+            "dst_ip": "192.168.1.254",
+            "src_port": 62546,
+            "dst_port": 53,
+            "protocol": 17,
+            "timestamp": 1715591966.399958,
+            "tcp_flags": "No TCP",
+            "payload": "No Payload",
+            "packet_size": 92
+        },
+        {
+            "src_ip": "192.168.1.188",
+            "dst_ip": "192.168.1.254",
+            "src_port": 50157,
+            "dst_port": 53,
+            "protocol": 17,
+            "timestamp": 1715591966.400365,
+            "tcp_flags": "No TCP",
+            "payload": "No Payload",
+            "packet_size": 92
+        },
+        {
+            "src_ip": "192.168.1.188",
+            "dst_ip": "192.168.1.254",
+            "src_port": 59182,
+            "dst_port": 53,
+            "protocol": 17,
+            "timestamp": 1715591969.135675,
+            "tcp_flags": "No TCP",
+            "payload": "No Payload",
+            "packet_size": 86
+        },
+        {
+            "src_ip": "192.168.1.188",
+            "dst_ip": "192.168.1.254",
+            "src_port": 53714,
+            "dst_port": 53,
+            "protocol": 17,
+            "timestamp": 1715591969.155543,
+            "tcp_flags": "No TCP",
+            "payload": "No Payload",
+            "packet_size": 86
+        },
+        {
+            "src_ip": "No IP Layer",
+            "dst_ip": "No IP Layer",
+            "src_port": "N/A",
+            "dst_port": "N/A",
+            "protocol": "No Protocol Info",
+            "timestamp": 1715591969.775611,
+            "tcp_flags": "No TCP",
+            "payload": "No Payload",
+            "packet_size": 42
+        }
+    ],
+    "Log Findings": [
+        {
+            "Time Generated": "2024-05-12 03:58:37",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x360"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 03:58:37",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x358"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 03:58:37",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x344"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 03:58:36",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x304"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 03:58:36",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x2fc"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 03:58:36",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x2f4"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 03:58:36",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x2a4"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 03:58:32",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x228"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 03:58:30",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x1e8"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 03:58:30",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x1bc"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 03:58:30",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x6c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 03:58:30",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x38"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 00:48:55",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x364"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 00:48:55",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x35c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 00:48:55",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x348"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 00:48:55",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x308"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 00:48:55",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x300"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 00:48:55",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x2f8"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 00:48:54",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x2ac"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 00:48:49",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x230"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 00:48:47",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x1ec"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 00:48:47",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x1c0"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 00:48:47",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x6c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-12 00:48:47",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x38"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:23:04",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x368"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:23:04",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x360"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:23:04",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x34c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:23:04",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x30c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:23:04",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x304"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:23:04",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x2fc"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:23:03",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x2b0"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:22:59",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x238"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:22:57",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x1f8"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:22:57",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x1cc"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:22:57",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x6c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:22:57",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x38"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:12:25",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x378"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:12:25",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x370"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:12:25",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x35c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:12:25",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x31c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:12:25",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x314"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:12:25",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x30c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:12:24",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x2b8"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:12:20",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x24c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:12:17",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x1f8"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:12:17",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x1c4"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:12:17",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x6c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-10 20:12:17",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x38"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-07 23:59:08",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x374"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-07 23:59:08",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x36c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-07 23:59:08",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x358"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-07 23:59:08",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x318"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-07 23:59:08",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x310"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-07 23:59:08",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x308"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-07 23:59:07",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x2b8"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-07 23:59:03",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x238"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-07 23:58:55",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x1f0"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-07 23:58:55",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x1c4"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-07 23:58:55",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x6c"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        },
+        {
+            "Time Generated": "2024-05-07 23:58:55",
+            "Event ID": 4688,
+            "Source": "Microsoft-Windows-Security-Auditing",
+            "Category": 13312,
+            "Computer": "WIN-Q6JHL2LU3SP",
+            "Details": [
+                {
+                    "New Process Name": "0x38"
+                },
+                {
+                    "Creator Process Name": ""
+                },
+                {
+                    "Process Command Line": "S-1-0-0"
+                }
+            ]
+        }
+    ],
+    "Conclusion and Recommendations": "Further analysis of the attached PCAP file is recommended "
+}

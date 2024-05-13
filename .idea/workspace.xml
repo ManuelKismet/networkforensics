@@ -6,6 +6,28 @@
   <component name="ChangeListManager">
     <list default="true" id="fef802fa-e521-4ed6-b4f5-57ebdc462f52" name="Changes" comment="processing">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Transcript.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/captured_packets_flow_11.pcap" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/captured_packets_flow_14.pcap" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/captured_packets_flow_2.pcap" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/captured_packets_flow_3.pcap" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/captured_packets_flow_5.pcap" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/captured_packets_flow_7.pcap" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/captured_packets_flow_8.pcap" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/encrypted_3.enc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/encrypted_7.enc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/evidence.py" beforeDir="false" afterPath="$PROJECT_DIR$/evidence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output.pcap" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report_file1715554351.1432028.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report_file1715554503.949352.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report_file1715555191.221447.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report_file1715555193.167665.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report_file1715555311.225156.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report_file1715555350.7535603.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report_file1715555431.2480214.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report_file1715555442.7301004.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report_file1715556631.3516202.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report_file1715556751.3470466.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,28 +69,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.evidence.executor": "Run",
-    "Python.identifyAnomalies.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.test.executor": "Run",
-    "Python.unsupervise.executor": "Run",
-    "Python.unsupervisedall.executor": "Run",
-    "Python.unsupervisedmodel.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "project.propVCSSupport.Confirmation",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.evidence.executor&quot;: &quot;Run&quot;,
+    &quot;Python.identifyAnomalies.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.unsupervise.executor&quot;: &quot;Run&quot;,
+    &quot;Python.unsupervisedall.executor&quot;: &quot;Run&quot;,
+    &quot;Python.unsupervisedmodel.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.Confirmation&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="thesis" is-module-sdk="true">
@@ -244,7 +266,8 @@
       <workItem from="1715482933003" duration="28795000" />
       <workItem from="1715534708755" duration="2203000" />
       <workItem from="1715536984681" duration="4677000" />
-      <workItem from="1715541858011" duration="15749000" />
+      <workItem from="1715541858011" duration="16213000" />
+      <workItem from="1715559210820" duration="9920000" />
     </task>
     <task id="LOCAL-00001" summary="processing">
       <option name="closed" value="true" />
@@ -462,7 +485,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715556798882</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="processing">
+      <option name="closed" value="true" />
+      <created>1715559110739</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1715559110739</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -477,9 +508,9 @@
     <SUITE FILE_PATH="coverage/thesis$unsupervise.coverage" NAME="unsupervise Coverage Results" MODIFIED="1715118040750" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/thesis$unsupervisedall.coverage" NAME="unsupervisedall Coverage Results" MODIFIED="1715384105564" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/thesis$main.coverage" NAME="main Coverage Results" MODIFIED="1711368062525" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/thesis$evidence.coverage" NAME="evidence Coverage Results" MODIFIED="1715556441409" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/thesis$evidence.coverage" NAME="evidence Coverage Results" MODIFIED="1715591551318" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/thesis$unsupervisedmodel.coverage" NAME="unsupervisedmodel Coverage Results" MODIFIED="1715440687134" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/thesis$identifyAnomalies.coverage" NAME="identifyAnomalies Coverage Results" MODIFIED="1710471632343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/thesis$test.coverage" NAME="test Coverage Results" MODIFIED="1715544127546" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/thesis$test.coverage" NAME="test Coverage Results" MODIFIED="1715588830473" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
