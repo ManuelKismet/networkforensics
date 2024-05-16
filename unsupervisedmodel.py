@@ -26,8 +26,8 @@ feature = ['Protocol', 'Flow Duration', 'Fwd Pkt Len Max', 'Fwd Pkt Len Min', 'F
 
 
 def data_preprocessing(data):
-    dff = pd.concat(data, axis=0)
-    df = dff.drop(feature, axis=1)
+    df = pd.concat(data, axis=0)
+    # df = dff.drop(feature, axis=1)
     print(df.sample(6))
     categories = ['Bot', 'FTP-BruteForce', 'SSH-Bruteforce', 'DDoS attacks-LOIC-HTTP', 'DDOS attack-LOIC-UDP',
                   'DDOS attack-HOIC', 'DoS attacks-Slowloris', 'DoS attacks-GoldenEye', 'DoS attacks-SlowHTTPTest',
@@ -52,6 +52,11 @@ def data_preprocessing(data):
     y = uSample['Label']
 
     cor_met = uSample.corr(method='pearson')
+    corr_matrix = cor_met.corr(method='pearson')
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f")
+    plt.title('Correlation Matrix')
+    plt.show()
     highly_correlated_pairs = []
 
     for i in range(len(cor_met.columns)):
@@ -67,11 +72,6 @@ def data_preprocessing(data):
     x = uSample.drop(cols_to_drop + ['Label'], axis=1)
     print(x.sample(5))
     return x, y
-    # corr_matrix = Xd[0].corr(method='pearson')
-    # plt.figure(figsize=(10, 8))
-    # sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f")
-    # plt.title('Correlation Matrix')
-    # plt.show()
 
 
 def scaling(data):
@@ -125,12 +125,12 @@ def plot_isolation_forest_pca(clf, trx, n_components=2):
 
 
 def predict(x, y):
-    clf = IsolationForest(random_state=42, n_jobs=-1, n_estimators=50)
+    isf = IsolationForest(random_state=42, n_jobs=-1, n_estimators=50)
 
     #[clf.fit(x) for k in range(3)]
-    clf.fit(x)
-    plot_isolation_forest_pca(clf, x)
-    y_pred = clf.predict(x)
+    isf.fit(x)
+    plot_isolation_forest_pca(isf, x)
+    y_pred = isf.predict(x)
     y_pred[y_pred == 1] = 0  # Normal
     y_pred[y_pred == -1] = 1  # Anomaly
 
@@ -151,7 +151,7 @@ def predict(x, y):
     plt.legend(loc="lower right")
     plt.show()
 
-    return clf
+    return isf
 
 
 if __name__ == '__main__':

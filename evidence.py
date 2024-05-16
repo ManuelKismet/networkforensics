@@ -24,6 +24,7 @@ pd.set_option('display.width', None)
 def model_predict(flow):
     model = load('unsup_anom_mod.joblib')
     pred = model.predict(flow.values.reshape(1, -1))
+    print(pred)
     return pred
 
 

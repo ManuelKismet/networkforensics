@@ -1,6 +1,9 @@
 import os
+import seaborn as sns
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pylab as pl
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 from sklearn.tree import DecisionTreeClassifier
@@ -41,6 +44,13 @@ def read_parquet_dataset(path):
 
 
 def binary_labeling(data):
+    # print(data['Label'].value_counts())
+    # plt.figure(figsize=(10, 12))
+    # data['Label'].value_counts().plot(kind='bar')
+    # plt.xlabel('Labels')
+    # plt.ylabel('Count')
+    # pl.title('Value counts of Labels')
+    # plt.show()
     label_map = {'Benign': 0}
     attack_labels = ['Bot', 'Brute Force -Web', 'Brute Force -XSS', 'SQL Injection',
                      'Infilteration', 'DoS attacks-Hulk', 'DoS attacks-SlowHTTPTest',
@@ -51,18 +61,42 @@ def binary_labeling(data):
 
     data['Label'] = data['Label'].map(label_map)
     print('labeling done')
+    # print(data['Label'].value_counts())
+    # data['Label'].value_counts().plot(kind='bar')
+    # plt.xlabel('Labels')
+    # plt.ylabel('Count')
+    # pl.title('Value counts of Labels')
+    # plt.show()
     return data
 
 
 def data_balancing(data):
+    print(data.shape)
+    print(data['Label'].value_counts())
+    plt.subplot(1, 2, 1)
+    data['Label'].value_counts().plot(kind='bar')
+    plt.title('Before Sampling')
+    plt.xlabel('Label')
+    plt.ylabel('Count')
     d_count = data['Label'].value_counts()
     min_d_label = d_count.idxmin()  # 1 as index of the min val count
     min_d_count = d_count[min_d_label]  # 541
+    data.reset_index(drop=True, inplace=True)
     max_d_ind = data.index[data['Label'] != min_d_label]
     rand_ind = np.random.choice(max_d_ind, min_d_count, replace=False)
     max_d_samp = data.loc[rand_ind]
     u_sampled = pd.concat([data[data['Label'] == min_d_label], max_d_samp], axis=0)
     data = u_sampled
+    print(data.shape)
+    print(data['Label'].value_counts())
+    print(data.shape)
+    plt.subplot(1, 2, 2)
+    data['Label'].value_counts().plot(kind='bar')
+    plt.title('After Sampling')
+    plt.xlabel('Label')
+    plt.ylabel('Count')
+    plt.tight_layout()
+    plt.show()
     print('balancing done')
     return data
 
@@ -102,6 +136,15 @@ def model_train_test(xt_data, yt_data, xte_data, yte_data):  # training data and
     dtc.fit(xt_data, yt_data)
     y_pred = dtc.predict(xte_data)
     print(classification_report(yte_data, y_pred))
+
+    report = classification_report(yte_data, y_pred, output_dict=True)
+    report_df = pd.DataFrame(report).transpose()
+    plt.figure(figsize=(10, 6))
+    sns.heatmap(report_df.iloc[:-1, :].T, annot=True, cmap='Blues', fmt='.2f')
+    plt.title('Classification Report')
+    plt.xlabel('Metrics')
+    plt.ylabel('Classes')
+    plt.show()
 
     # hyper param tuning
     # rd = RandomizedSearchCV(rdf, param_distributions=params, n_iter=10, cv=3, n_jobs=-1)
